@@ -1,2 +1,2 @@
 # bottle
-bottle is a library contains shared component for C++
+bottle is a collection of demos in C++
