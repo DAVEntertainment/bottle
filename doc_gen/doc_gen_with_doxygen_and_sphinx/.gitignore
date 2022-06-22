@@ -1,0 +1,8 @@
+.venv*/
+.build/
+_build/
+build/
+html/
+__pycache__/
+.doxygen/
+.sphinx/

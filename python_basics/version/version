@@ -1,0 +1,45 @@
+VSVersionInfo(
+    ffi = FixedFileInfo(
+        filevers    = (1,0,0,0),
+        prodvers    = (1,0,0,0),
+        mask        = 0x3f,
+        flags       = 0x0,          # Debug flag
+        OS          = 0x00000004,   # VOS__WINDOWS32
+        fileType    = 0x00000001,   # VFT_APP
+        subtype     = 0x0,          # VFT2_UNKNOWN
+        date        = (0, 0)
+    ),
+    kids = [
+        StringFileInfo(
+            [
+                StringTable(
+                    u'040904B0',
+                    [
+                        StringStruct(u'CompanyName',        u'D. Co. Ltd.'),
+                        StringStruct(u'FileDescription',    u'Game Client'),
+                        StringStruct(u'FileVersion',        u'1.0.0.0'),
+                        StringStruct(u'InternalName',       u'Game Client'),
+                        StringStruct(u'LegalCopyright',     u'\xa9 D. Co. Ltd. All rights reserved.'),
+                        StringStruct(u'OriginalFilename',   u'game_client.exe'),
+                        StringStruct(u'ProductName',        u'Game'),
+                        StringStruct(u'ProductVersion',     u'00000000')
+                    ]
+                ),
+                StringTable(
+                    u'080404B0',
+                    [
+                        StringStruct(u'CompanyName',        u'D.有限公司'),
+                        StringStruct(u'FileDescription',    u'游戏客户端'),
+                        StringStruct(u'FileVersion',        u'1.0.0.0'),
+                        StringStruct(u'InternalName',       u'Game Client'),
+                        StringStruct(u'LegalCopyright',     u'\xa9 D. Co. Ltd. All rights reserved.'),
+                        StringStruct(u'OriginalFilename',   u'game_client.exe'),
+                        StringStruct(u'ProductName',        u'Game'),
+                        StringStruct(u'ProductVersion',     u'00000000')
+                    ]
+                )
+            ]
+        ),
+        VarFileInfo([VarStruct(u'Translation', [0x0804, 0x04B0])])
+    ]
+)

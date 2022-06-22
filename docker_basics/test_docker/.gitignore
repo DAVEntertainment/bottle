@@ -1,0 +1,13 @@
+
+        BLOCK "080404b0" // 0x0804 Simplified Chinese, 0x04b0 Unicode
+        BEGIN
+            VALUE "CompanyName",        "D.有限公司"
+            VALUE "FileDescription",    "游戏客户端"
+            VALUE "FileVersion",        PRODUCT_VERSION_STRING
+            VALUE "InternalName",       COMPONENT_NAME
+            VALUE "LegalCopyright",     COPYRIGHT_INFO
+            VALUE "LegalTrademarks",    ""
+            VALUE "OriginalFilename",   COMPONENT_FILE_NAME
+            VALUE "ProductName",        PRODUCT_NAME
+            VALUE "ProductVersion",     COMMIT
+        END

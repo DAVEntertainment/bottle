@@ -1,0 +1,16 @@
+[requires]
+gtest/1.8.1@bincrafters/stable
+
+[generators]
+cmake
+cmake_paths
+
+[options]
+gtest:build_gmock=False
+gtest:shared=True
+gtest:no_main=False
+
+[imports]
+bin, *.dll -> ./bin
+lib, *.dylib* -> ./bin
+lib, *.so* -> ./bin

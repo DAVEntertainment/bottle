@@ -1,0 +1,5 @@
+FROM busybox:latest
+
+COPY ./entrypoint.sh /var/tmp
+
+RUN chmod +x /var/tmp
