@@ -1,0 +1,10 @@
+# Build directories
+.build/
+_build/
+build/
+
+# Log files
+*.log
+
+# Project configuration
+.vscode

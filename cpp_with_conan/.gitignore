@@ -1,0 +1,7 @@
+# Build Directories
+build/
+.build/
+_build/
+
+# Virtual Environment
+.venv*/

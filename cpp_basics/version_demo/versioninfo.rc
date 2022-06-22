@@ -1,0 +1,55 @@
+// VERSIONINFO resource, see https://docs.microsoft.com/en-us/windows/win32/menurc/versioninfo-resource
+
+// #pragma code_page(936)
+#include <winresrc.h>
+
+// Configurations may modified
+#define PRODUCT_VERSION             1,0,0,1
+#define PRODUCT_VERSION_STRING      "1.0.0.1"
+#define COMMIT                      "xxxxxxxx"
+#define PRODUCT_NAME                "Game"
+#define COPYRIGHT_INFO              "(C) D. Co. Ltd. All Rights Reserved."
+#define COMPONENT_NAME              "Game Client"
+#define COMPONENT_FILE_NAME         "game_client.exe"
+
+// Flags
+#ifdef _DEBUG
+    #define VER_DBG           VS_FF_DEBUG
+#else
+    #define VER_DBG           0
+#endif
+
+// Version info start
+VS_VERSION_INFO VERSIONINFO
+
+// Parameters
+FILEVERSION         PRODUCT_VERSION
+PRODUCTVERSION      PRODUCT_VERSION
+FILEFLAGSMASK       0x3fL
+FILEFLAGS           VER_DBG
+FILEOS              VOS__WINDOWS32
+FILETYPE            VFT_DRV
+FILESUBTYPE         0x0L
+
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        // Info blcoks, block-name = <language> + <codepage(or called charset)>
+        BLOCK "040904b0"  // 0x0409 U.S. English, 0x04b0 Unicode
+        BEGIN
+            VALUE "CompanyName",        "D. Co. Ltd."
+            VALUE "FileDescription",    "Game Client"
+            VALUE "FileVersion",        PRODUCT_VERSION_STRING
+            VALUE "InternalName",       COMPONENT_NAME
+            VALUE "LegalCopyright",     COPYRIGHT_INFO
+            VALUE "LegalTrademarks",    ""
+            VALUE "OriginalFilename",   COMPONENT_FILE_NAME
+            VALUE "ProductName",        PRODUCT_NAME
+            VALUE "ProductVersion",     COMMIT
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 0x04b0
+    END
+END
