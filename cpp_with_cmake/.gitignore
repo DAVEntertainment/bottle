@@ -1,3 +1,7 @@
 # Build Directories
 .build/
 _build/
+
+# Install
+.install/
+_install/
