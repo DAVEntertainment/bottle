@@ -1,0 +1,14 @@
+[requires]
+boost/1.79.0@demo/testing
+
+[generators]
+cmake
+cmake_paths
+
+[options]
+boost:shared=False
+
+[imports]
+bin, *.dll -> ./bin
+lib, *.dylib* -> ./bin
+lib, *.so* -> ./bin
