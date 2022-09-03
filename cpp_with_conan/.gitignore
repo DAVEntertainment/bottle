@@ -5,3 +5,8 @@ _build/
 
 # Virtual Environment
 .venv*/
+
+# Install Directories
+install/
+.install/
+_install/
