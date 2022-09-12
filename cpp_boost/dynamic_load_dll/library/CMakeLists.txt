@@ -22,36 +22,26 @@ set(TARGET_PRIVATE_HEADER_INSTALL_DIR include/private)
 # target sources
 ##################################################################
 set(TARGET_INCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}/public
-    ${CMAKE_CURRENT_SOURCE_DIR}/private
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 set(TARGET_SOURCES
     imp.cpp
 )
 set(TARGET_PUBLIC_HEADERS
-    public/demo/add.h
-    public/demo/declare.h
-)
-set(TARGET_PRIVATE_HEADERS
-    private/priv_demo/del.h
+    declare.h
 )
 
 ##################################################################
 # library properties
 ##################################################################
-add_library(${TARGET_NAME} SHARED ${TARGET_PUBLIC_HEADERS} ${TARGET_PRIVATE_HEADERS} ${TARGET_SOURCES})
-# set_target_properties(${TARGET_NAME} PROPERTIES
-#     MSVC_RUNTIME_LIBRARY MultiThreadedDLL
-# )
+add_library(${TARGET_NAME} SHARED ${TARGET_PUBLIC_HEADERS} ${TARGET_SOURCES})
+set_target_properties(${TARGET_NAME} PROPERTIES
+    MSVC_RUNTIME_LIBRARY MultiThreadedDLL
+)
 
-# set public headers, 
-#   cmake will install them automatically to
-#   PUBLIC_HEADER DESTINATION
 set_target_properties(${TARGET_NAME} PROPERTIES
     PUBLIC_HEADER "${TARGET_PUBLIC_HEADERS}"
-    # PRIVATE_HEADER "${TARGET_PRIVATE_HEADERS}" # if PRIVATE_HEADER is given, then will be installed, too
 )
-# add include directories for generating shared library, as property INCLUDE_DIRECTORIES
 target_include_directories(${TARGET_NAME} PRIVATE
     ${TARGET_INCLUDE_DIRS}
 )

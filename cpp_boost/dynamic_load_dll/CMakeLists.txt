@@ -22,7 +22,12 @@ add_executable(lib_ref_demo
 )
 
 # link shared library to ref demo
-target_link_libraries(lib_ref_demo PRIVATE Demo::demo Boost::headers Boost::filesystem)
+target_link_libraries(lib_ref_demo
+    PRIVATE
+        Demo::demo
+        Boost::headers
+        Boost::filesystem
+)
 
 # install Demo::demo library to output dir after build done, so that lib_ref_demo.exe can find demo.dll
 add_custom_command(

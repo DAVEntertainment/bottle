@@ -1,11 +1,12 @@
 #include <iostream>
 #include "boost/dll/shared_library.hpp"
-#include "add.h"
 
-
-// although we don't share del.h, but the symbol is there anyway,
-//  we can use them by simply declare the signature
+// although we don't share definition of del, but the symbol is there anyway,
+//  we can use them by simply declaring the signature
+#define DEF_API __declspec(dllimport)
 DEF_API int del(int, int);
+DEF_API int add(int, int);
+
 
 int main(int argc, char* argv[]) {
     int x = 10;
