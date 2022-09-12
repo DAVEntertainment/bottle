@@ -41,3 +41,5 @@ Packages
 ```
 Keyword `from local cache - Cache` proves gtest is used from local cache
 
+# TODO
+- [ ] Now we skip rmdir(lib/cmake) to enable cmake find gtest with find_package (see conanfile.py:157 for more details), but it's not how conan works, we need to figure something out with conan
