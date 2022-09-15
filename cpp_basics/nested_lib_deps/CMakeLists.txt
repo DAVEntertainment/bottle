@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16.6)
-project(lib_ref_demo)
+project(nested_lib_deps)
 
 include(${CMAKE_CURRENT_LIST_DIR}/utils.cmake)
 
@@ -15,21 +15,21 @@ find_package(shared_b REQUIRED CONFIG)
 show_all_found_targets()
 
 # add ref demo exe
-add_executable(lib_ref_demo
+add_executable(nested_lib_deps
     ref.cpp
 )
 
 # link shared library to ref demo
-target_link_libraries(lib_ref_demo
+target_link_libraries(nested_lib_deps
     PRIVATE
         Lib::shared_a
         Lib::shared_b
 )
 
-# install Demo::demo library to output dir after build done, so that lib_ref_demo.exe can find demo.dll
+# install Demo::demo library to output dir after build done, so that nested_lib_deps.exe can find demo.dll
 add_custom_command(
-    TARGET lib_ref_demo
+    TARGET nested_lib_deps
     POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Lib::shared_a> $<TARGET_FILE_DIR:lib_ref_demo>
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Lib::shared_b> $<TARGET_FILE_DIR:lib_ref_demo>
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Lib::shared_a> $<TARGET_FILE_DIR:nested_lib_deps>
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Lib::shared_b> $<TARGET_FILE_DIR:nested_lib_deps>
 )
