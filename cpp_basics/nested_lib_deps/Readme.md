@@ -6,7 +6,7 @@ Demo of libraries dependencies
     |           |
 shared_a      shared_b
     |           |
-static(v1)    static(v2)
+static(v0)    static(v1)
 ```
 Intended to prove that shared library `a` and shared library `b` can link to same library with different versions.
 
@@ -17,24 +17,18 @@ Call stack
           |                        |
 shared_a (show_a)           shared_b (show_b)
           |                         |
-static(v1) (check(v1))    static(v2) (check(v2))
+static(v0) (check(v0))    static(v1) (check(v1))
 ```
 
-
-# Setup boost
-Just run following command to setup boost for demo
-```
-python ../build_boost/build.py --static
-```
 
 # How to
 Just run following command to run the demo
 ```batch
-build_demo.cmd
+build.cmd
 ```
 
 # Tips
 ### Check exported symbols
 ```
-dumpbin /EXPORTS /SYMBOLS demod.dll
+dumpbin /EXPORTS /SYMBOLS shared_a.dll
 ```

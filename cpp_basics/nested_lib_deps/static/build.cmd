@@ -1,2 +1,2 @@
-call build_version.cmd 0
-call build_version.cmd 1
+call %~dp0\build_version.cmd 0
+call %~dp0\build_version.cmd 1
