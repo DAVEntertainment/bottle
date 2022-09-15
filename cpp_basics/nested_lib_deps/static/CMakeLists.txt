@@ -7,9 +7,19 @@ project(static_lib)
 set(CMAKE_DEBUG_POSTFIX d)
 
 ##################################################################
+# version
+##################################################################
+option(VERSION "" 0)
+if(NOT ${VERSION} STREQUAL "0" AND NOT ${VERSION} STREQUAL "1")
+    message(FATAL_ERROR "VERSION should be set to 0 or 1, got ${VERSION}")
+endif()
+message(STATUS "VERSION = ${VERSION}")
+add_definitions(-DVERSION=${VERSION})
+
+##################################################################
 # target configurations
 ##################################################################
-set(TARGET_NAME static_lib)
+set(TARGET_NAME static)
 set(TARGET_NAMESPACE Lib)
 
 set(TARGET_RUNTIME_INSTALL_DIR bin)
@@ -28,13 +38,13 @@ set(TARGET_SOURCES
     imp.cpp
 )
 set(TARGET_PUBLIC_HEADERS
-    declare.h
+    check.h
 )
 
 ##################################################################
 # library properties
 ##################################################################
-add_library(${TARGET_NAME} SHARED ${TARGET_PUBLIC_HEADERS} ${TARGET_SOURCES})
+add_library(${TARGET_NAME} STATIC ${TARGET_PUBLIC_HEADERS} ${TARGET_SOURCES})
 set_target_properties(${TARGET_NAME} PROPERTIES
     MSVC_RUNTIME_LIBRARY MultiThreadedDLL
 )
@@ -54,9 +64,6 @@ target_include_directories(${TARGET_NAME} SYSTEM INTERFACE
     "$<BUILD_INTERFACE:${_include_dirs}>"
     "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${TARGET_PUBLIC_HEADER_INSTALL_DIR}>"
 )
-
-# add macro DEMO_EXPORT_API so that *.h will enable dllexport
-target_compile_definitions(${TARGET_NAME} PRIVATE -DDEMO_EXPORT_API)
 
 ##################################################################
 # install target
@@ -90,7 +97,7 @@ include(CMakePackageConfigHelpers)
 # generate <TARGET>ConfigVersion.cmake file
 write_basic_package_version_file(
     ${TARGET_NAME}ConfigVersion.cmake
-    VERSION 1.0.0
+    VERSION 1.0.${VERSION}
     COMPATIBILITY SameMajorVersion # AnyNewerVersion|SameMajorVersion|SameMinorVersion|ExactVersion
 )
 # generate <TARGET>Config.cmake file

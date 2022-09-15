@@ -19,6 +19,20 @@ set(TARGET_PUBLIC_HEADER_INSTALL_DIR include)
 set(TARGET_PRIVATE_HEADER_INSTALL_DIR include/private)
 
 ##################################################################
+# dependencies
+##################################################################
+include(${CMAKE_CURRENT_LIST_DIR}/../utils.cmake)
+
+# add path for find_package
+list(APPEND CMAKE_PREFIX_PATH
+    ${CMAKE_CURRENT_LIST_DIR}/../static/.install_v1
+)
+
+# find shared library we made
+find_package(static REQUIRED CONFIG)
+show_all_found_targets()
+
+##################################################################
 # target sources
 ##################################################################
 set(TARGET_INCLUDE_DIRS
@@ -28,7 +42,7 @@ set(TARGET_SOURCES
     imp.cpp
 )
 set(TARGET_PUBLIC_HEADERS
-    declare.h
+    show_b.h
 )
 
 ##################################################################
@@ -45,6 +59,9 @@ set_target_properties(${TARGET_NAME} PROPERTIES
 target_include_directories(${TARGET_NAME} PRIVATE
     ${TARGET_INCLUDE_DIRS}
 )
+target_link_libraries(${TARGET_NAME} PRIVATE
+    Lib::static
+)
 
 # speicify interface include directories,
 #   as property INTERFACE_INCLUDE_DIRECTORIES and INTERFACE_SYSTEM_INCLUDE_DIRECTORIES,
@@ -56,7 +73,7 @@ target_include_directories(${TARGET_NAME} SYSTEM INTERFACE
 )
 
 # add macro DEMO_EXPORT_API so that *.h will enable dllexport
-target_compile_definitions(${TARGET_NAME} PRIVATE -DDEMO_EXPORT_API)
+target_compile_definitions(${TARGET_NAME} PRIVATE -DDEMOB_EXPORT_API)
 
 ##################################################################
 # install target

@@ -1,10 +1,9 @@
-#include "declare.h"
+#include <iostream>
+#include "show_b.h"
+#include "check.h"
 
-int add(int a, int b) {
-    return a + b;
-}
-
-DEF_API int del(int, int);
-int del(int a, int b) {
-    return a - b;
+void show_b()
+{
+    std::cout << "show_b" << std::endl;
+    check();
 }
