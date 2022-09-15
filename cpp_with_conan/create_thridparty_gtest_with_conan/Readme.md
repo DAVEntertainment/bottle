@@ -10,10 +10,11 @@ conan create . gtest/1.11.0@demo/testing
 ```
 
 # How to upload
-Run the command below to upload gtest library
+Run the command below to upload gtest library (need granted access from conancenter)
 ```bash
 conan upload gtest/1.11.0@demo/testing --all -r=conancenter
 ```
+**It is not necessary to upload before use the cached gtest library**
 
 # Notes
 conanfile.py        - recipe
@@ -41,5 +42,4 @@ Packages
 Keyword `from local cache - Cache` proves gtest is used from local cache
 
 # TODO
-- [ ] gtest/1.11.0@demo/testing do not generate FindGTest.cmake, which makes `build_use_demo.cmd` not able to build demo
-
+- [ ] Now we skip rmdir(lib/cmake) to enable cmake find gtest with find_package (see conanfile.py:157 for more details), but it's not how conan works, we need to figure something out with conan

@@ -1,0 +1,18 @@
+# Build Directories
+build/
+.build/
+_build/
+
+# Install Directories
+install/
+.install/
+_install/
+
+# Virtual Environment
+.venv*/
+
+# Conan Generated
+conan_paths.cmake
+
+# boost repo and binaries
+boost*/
