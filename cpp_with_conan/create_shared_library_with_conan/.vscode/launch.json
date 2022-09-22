@@ -1,0 +1,37 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Create (program)",
+            "type": "python",
+            "request": "launch",
+            "program": ".venv\\Scripts\\conan.exe",
+            "args": [
+                "create",
+                "--profile",
+                "default",
+                "conan_recipe/all/conanfile.py",
+                "add/1.0.0@demo/testing",
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Create (module)",
+            "type": "python",
+            "request": "launch",
+            "module": "conans.conan",
+            "justMyCode": true,
+            "args": [
+                "create",
+                "--profile",
+                "default",
+                "conan_recipe/all/conanfile.py",
+                "add/1.0.0@demo/testing",
+            ],
+        }
+    ]
+}
