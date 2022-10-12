@@ -10,6 +10,7 @@ class HelloConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     url = "https://github.com/DAVEntertainment/simple_cpp.git"
     generators = "CMakeDeps", "CMakeToolchain"
+    settings = "os", "arch", "compiler", "build_type"
 
     def source(self):
         print("@@@ start source phase")

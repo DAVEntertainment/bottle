@@ -2,7 +2,7 @@
 
 Create library add
 ```
-conan create conan_recipe/all/conanfile.py add/1.0.0@demo/testing
+conan_recipe\create.cmd
 ```
 
 
