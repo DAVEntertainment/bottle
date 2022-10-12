@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.16.6)
 project(Demo)
 
 ##################################################################
+# project configurations
+##################################################################
+# set(CMAKE_DEBUG_POSTFIX d) # This will make conan cannot generate correct cmake toolchain file
+
+##################################################################
 # target configurations
 ##################################################################
 set(TARGET_NAME add)
