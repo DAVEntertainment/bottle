@@ -11,7 +11,7 @@ from shutil import copy, rmtree, copytree
 
 class HelloConan(ConanFile):
     name = "add"
-    version = "1.1.0"
+    version = "1.0.0"
     description = """\"add\" library"""
     settings = "os", "arch", "compiler", "build_type"
     url = "https://github.com/DAVEntertainment/simple_cpp.git"
@@ -19,7 +19,7 @@ class HelloConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
 
     def export(self):
-        source_dir = joinpath(dirname(__file__), '..', self.name)
+        source_dir = joinpath(dirname(__file__), self.name)
 
         update_conandata(self, {
             "source_origin": abspath(source_dir),

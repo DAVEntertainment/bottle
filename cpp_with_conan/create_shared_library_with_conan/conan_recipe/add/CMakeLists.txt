@@ -4,7 +4,7 @@ project(Demo)
 ##################################################################
 # project configurations
 ##################################################################
-# set(CMAKE_DEBUG_POSTFIX d) # This will make conan cannot generate correct cmake toolchain file
+set(CMAKE_DEBUG_POSTFIX d)
 
 ##################################################################
 # target configurations

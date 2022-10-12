@@ -7,7 +7,9 @@ rmdir /s /q %INSTALL_DIR%
 
 mkdir %BUILD_DIR%
 cmake -S %SOURCE_DIR% -B %BUILD_DIR% -DCMAKE_INSTALL_PREFIX=%INSTALL_DIR%
-cmake --build %BUILD_DIR% --config Debug
-cmake --install %BUILD_DIR% --config Debug
+
+@REM cmake --build %BUILD_DIR% --config Debug
+@REM cmake --install %BUILD_DIR% --config Debug
+
 cmake --build %BUILD_DIR% --config Release
 cmake --install %BUILD_DIR% --config Release
