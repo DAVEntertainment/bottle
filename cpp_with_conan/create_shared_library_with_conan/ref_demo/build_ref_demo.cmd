@@ -1,5 +1,3 @@
-call library\build_shared.cmd
-
 set SOURCE_DIR=%~dp0
 set BUILD_DIR=%SOURCE_DIR%\.build
 
@@ -7,10 +5,12 @@ rmdir /s /q %BUILD_DIR%
 
 mkdir %BUILD_DIR%
 
-conan install %SOURCE_DIR% -if %BUILD_DIR% --build=missing
-
-cmake -S %SOURCE_DIR% -B %BUILD_DIR% -DCMAKE_TOOLCHAIN_FILE=%BUILD_DIR%\conan_paths.cmake
-cmake --build %BUILD_DIR% --config Debug
-%BUILD_DIR%\Debug\lib_ref_demo.exe
+conan install %SOURCE_DIR% -if %BUILD_DIR% --build=outdated -s build_type=Release
+cmake -S %SOURCE_DIR% -B %BUILD_DIR% -DCMAKE_TOOLCHAIN_FILE=%BUILD_DIR%\conan_toolchain.cmake
 cmake --build %BUILD_DIR% --config Release
-%BUILD_DIR%\Release\lib_ref_demo.exe
+@REM %BUILD_DIR%\Release\lib_ref_demo.exe
+
+@REM conan install %SOURCE_DIR% -if %BUILD_DIR% --build=outdated -s build_type=Debug
+@REM cmake -S %SOURCE_DIR% -B %BUILD_DIR% -DCMAKE_TOOLCHAIN_FILE=%BUILD_DIR%\conan_toolchain.cmake
+@REM cmake --build %BUILD_DIR% --config Debug
+@REM @REM %BUILD_DIR%\Debug\lib_ref_demo.exe

@@ -1,10 +1,5 @@
 #include <iostream>
-#include "declare.h"
-
-// although we don't share definition of del, but the symbol is there anyway,
-//  we can use them by simply declaring the signature
-#define DEF_API extern "C" __declspec(dllimport) /* extern "C" is necessary for exported symbol to name simply with C style */
-DEF_API int add(int, int);
+#include "add.h"
 
 int main(int argc, char* argv[]) {
     int x = 10;

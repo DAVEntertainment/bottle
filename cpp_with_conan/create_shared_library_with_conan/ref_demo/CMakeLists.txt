@@ -21,10 +21,10 @@ target_link_libraries(lib_ref_demo
         Add::add
 )
 
-# install library to output dir after build done, so that lib_ref_demo.exe can find demo.dll
-add_custom_command(
-    TARGET lib_ref_demo
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Add::add> $<TARGET_FILE_DIR:lib_ref_demo>
-    COMMAND ${CMAKE_COMMAND} -E echo "Install Add::add runtime for lib_ref_demo"
-)
+# # install library to output dir after build done, so that lib_ref_demo.exe can find demo.dll
+# add_custom_command(
+#     TARGET lib_ref_demo
+#     POST_BUILD
+#     COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Add::add> $<TARGET_FILE_DIR:lib_ref_demo>
+#     COMMAND ${CMAKE_COMMAND} -E echo "Install Add::add runtime for lib_ref_demo"
+# )

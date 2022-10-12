@@ -2,7 +2,8 @@
 add/1.0.0@demo/testing
 
 [generators]
-cmake_paths
+CMakeDeps
+CMakeToolchain
 
 [options]
 

@@ -5,12 +5,11 @@ from os.path import join as joinpath
 
 class HelloConan(ConanFile):
     name = "add"
-    version = "1.0.0"
+    version = "1.1.0"
     description = """\"add\" library"""
-    generator = "cmake_paths"
     settings = "os", "arch", "compiler", "build_type"
     url = "https://github.com/DAVEntertainment/simple_cpp.git"
-    generators = "cmake_paths"
+    generators = "CMakeDeps", "CMakeToolchain"
 
     def source(self):
         print("@@@ start source phase")
@@ -37,3 +36,7 @@ class HelloConan(ConanFile):
         cmake.install()
         tools.rmdir(joinpath(self.package_folder, "lib", "cmake"))
         tools.remove_files_by_mask(joinpath(self.package_folder, "lib"), "*.pdb")
+
+    def package_info(self):
+        self.cpp_info.libs = ["add"]
+        self.cpp_info.set_property("cmake_target_name", "Add::add")
