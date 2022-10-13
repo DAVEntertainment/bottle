@@ -1,0 +1,11 @@
+[requires]
+add/1.0.0@demo/testing
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
+[options]
+
+[imports]
+bin, *.dll -> ./bin
