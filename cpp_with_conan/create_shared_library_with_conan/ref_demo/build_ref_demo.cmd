@@ -1,6 +1,6 @@
 set SOURCE_DIR=%~dp0
 
-
+@REM Better to build debug and release in separate folder, or they will affect each otehr
 set BUILD_DIR=%SOURCE_DIR%\.build_release
 rmdir /s /q %BUILD_DIR%
 conan install %SOURCE_DIR% -if %BUILD_DIR% --build=missing --profile:build %SOURCE_DIR%\conanprofile.txt --profile:host %SOURCE_DIR%\conanprofile.txt -s build_type=Release

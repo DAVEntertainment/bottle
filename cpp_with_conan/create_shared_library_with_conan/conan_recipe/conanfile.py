@@ -1,12 +1,10 @@
-from conans import ConanFile, CMake, tools
+from conans import ConanFile, CMake
 from conan.tools.files import update_conandata
 from functools import lru_cache
 from os.path import join as joinpath
-from os.path import split as splitpath
 from os.path import basename, dirname, abspath
-from os import getcwd, environ
-from sys import argv
-from shutil import copy, rmtree, copytree
+from os import getcwd
+from shutil import copytree
 
 
 class HelloConan(ConanFile):

@@ -9,5 +9,3 @@ CMakeToolchain
 
 [imports]
 bin, *.dll -> ./bin
-lib, *.dylib* -> ./bin
-lib, *.so* -> ./bin
