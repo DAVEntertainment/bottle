@@ -1,14 +1,19 @@
 set SOURCE_DIR=%~dp0
-set BUILD_DIR=%SOURCE_DIR%\.build
 
+
+set BUILD_DIR=%SOURCE_DIR%\.build_release
 rmdir /s /q %BUILD_DIR%
+conan install %SOURCE_DIR% -if %BUILD_DIR% --build=missing --profile:build %SOURCE_DIR%\conanprofile.txt --profile:host %SOURCE_DIR%\conanprofile.txt -s build_type=Release
+cmake -S %SOURCE_DIR% -B %BUILD_DIR% -DCMAKE_TOOLCHAIN_FILE=%BUILD_DIR%\conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%BUILD_DIR%
+cmake --build %BUILD_DIR% --config Release
+cmake --install %BUILD_DIR% --config Release
+call %BUILD_DIR%\bin\lib_ref_demo.exe
 
-conan install %SOURCE_DIR% -if %BUILD_DIR% --build=missing --profile %SOURCE_DIR%\conanprofile.txt -s build_type=Release
-cmake -S %SOURCE_DIR% -B %BUILD_DIR% -DCMAKE_TOOLCHAIN_FILE=%BUILD_DIR%\conan_toolchain.cmake
-@REM cmake --build %BUILD_DIR% --config Release
-@REM @REM %BUILD_DIR%\Release\lib_ref_demo.exe
 
-@REM conan install %SOURCE_DIR% -if %BUILD_DIR% --build --profile %SOURCE_DIR%\conanprofile.txt -s build_type=Debug
-@REM cmake -S %SOURCE_DIR% -B %BUILD_DIR% -DCMAKE_TOOLCHAIN_FILE=%BUILD_DIR%\conan_toolchain.cmake
-@REM @REM cmake --build %BUILD_DIR% --config Debug
-@REM @REM @REM %BUILD_DIR%\Debug\lib_ref_demo.exe
+set BUILD_DIR=%SOURCE_DIR%\.build_debug
+rmdir /s /q %BUILD_DIR%
+conan install %SOURCE_DIR% -if %BUILD_DIR% --build=missing --profile:build %SOURCE_DIR%\conanprofile.txt --profile:host %SOURCE_DIR%\conanprofile.txt -s build_type=Debug
+cmake -S %SOURCE_DIR% -B %BUILD_DIR% -DCMAKE_TOOLCHAIN_FILE=%BUILD_DIR%\conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=%BUILD_DIR%
+cmake --build %BUILD_DIR% --config Debug
+cmake --install %BUILD_DIR% --config Debug
+call %BUILD_DIR%\bin\lib_ref_demo.exe

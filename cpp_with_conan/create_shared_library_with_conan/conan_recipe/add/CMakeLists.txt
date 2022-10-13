@@ -4,7 +4,7 @@ project(Demo)
 ##################################################################
 # project configurations
 ##################################################################
-set(CMAKE_DEBUG_POSTFIX d)
+# set(CMAKE_DEBUG_POSTFIX d) # cannot use postfix, conan cannot find add[d] target
 
 ##################################################################
 # target configurations
