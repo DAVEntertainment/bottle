@@ -1,16 +1,19 @@
-call library\build_shared.cmd
-
 set SOURCE_DIR=%~dp0
-set BUILD_DIR=%SOURCE_DIR%\.build
 
+@REM Better to build debug and release in separate folder, or they will affect each otehr
+set BUILD_DIR=%SOURCE_DIR%\.build_release
 rmdir /s /q %BUILD_DIR%
-
-mkdir %BUILD_DIR%
-
-conan install %SOURCE_DIR% -if %BUILD_DIR% --build=missing
-
-cmake -S %SOURCE_DIR% -B %BUILD_DIR% -DCMAKE_TOOLCHAIN_FILE=%BUILD_DIR%\conan_paths.cmake
-cmake --build %BUILD_DIR% --config Debug
-%BUILD_DIR%\Debug\lib_ref_demo.exe
+conan install %SOURCE_DIR% -if %BUILD_DIR% --build=missing --profile:build %SOURCE_DIR%\conanprofile.txt --profile:host %SOURCE_DIR%\conanprofile.txt -s build_type=Release
+cmake -S %SOURCE_DIR% -B %BUILD_DIR% -DCMAKE_TOOLCHAIN_FILE=%BUILD_DIR%\conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%BUILD_DIR%
 cmake --build %BUILD_DIR% --config Release
-%BUILD_DIR%\Release\lib_ref_demo.exe
+cmake --install %BUILD_DIR% --config Release
+call %BUILD_DIR%\bin\lib_ref_demo.exe
+
+
+set BUILD_DIR=%SOURCE_DIR%\.build_debug
+rmdir /s /q %BUILD_DIR%
+conan install %SOURCE_DIR% -if %BUILD_DIR% --build=missing --profile:build %SOURCE_DIR%\conanprofile.txt --profile:host %SOURCE_DIR%\conanprofile.txt -s build_type=Debug
+cmake -S %SOURCE_DIR% -B %BUILD_DIR% -DCMAKE_TOOLCHAIN_FILE=%BUILD_DIR%\conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=%BUILD_DIR%
+cmake --build %BUILD_DIR% --config Debug
+cmake --install %BUILD_DIR% --config Debug
+call %BUILD_DIR%\bin\lib_ref_demo.exe

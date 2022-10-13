@@ -2,13 +2,7 @@ cmake_minimum_required(VERSION 3.16.6)
 project(lib_ref_demo)
 
 # find shared library we made
-find_package(add REQUIRED)
-# find_package(add REQUIRED CONFIG COMPONENTS add)
-get_property(_targets DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY IMPORTED_TARGETS)
-message(STATUS "@@@ IMPORTED_TARGETS:")
-foreach(_t ${_targets})
-    message(STATUS "  ${_t}")
-endforeach()
+find_package(add REQUIRED CONFIG COMPONENTS add)
 
 # add ref demo exe
 add_executable(lib_ref_demo
@@ -21,10 +15,32 @@ target_link_libraries(lib_ref_demo
         Add::add
 )
 
-# install library to output dir after build done, so that lib_ref_demo.exe can find demo.dll
-add_custom_command(
-    TARGET lib_ref_demo
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Add::add> $<TARGET_FILE_DIR:lib_ref_demo>
-    COMMAND ${CMAKE_COMMAND} -E echo "Install Add::add runtime for lib_ref_demo"
+# config install paths
+install(
+    TARGETS lib_ref_demo
+    RUNTIME DESTINATION bin
 )
+
+#######################################################
+# debug lines
+#######################################################
+get_property(_targets DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY IMPORTED_TARGETS)
+message(STATUS "@@@ IMPORTED_TARGETS:")
+foreach(_t ${_targets})
+    message(STATUS "  ${_t}")
+endforeach()
+
+get_target_property(_value Add::add INTERFACE_LINK_OPTIONS)
+message(STATUS "@@@ Add::add INTERFACE_LINK_OPTIONS = ${_value}")
+
+get_target_property(_value Add::add INTERFACE_INCLUDE_DIRECTORIES)
+message(STATUS "@@@ Add::add INTERFACE_INCLUDE_DIRECTORIES = ${_value}")
+
+get_target_property(_value Add::add INTERFACE_COMPILE_DEFINITIONS)
+message(STATUS "@@@ Add::add INTERFACE_COMPILE_DEFINITIONS = ${_value}")
+
+get_target_property(_value Add::add INTERFACE_COMPILE_OPTIONS)
+message(STATUS "@@@ Add::add INTERFACE_COMPILE_OPTIONS = ${_value}")
+
+get_target_property(_value Add::add INTERFACE_LINK_LIBRARIES)
+message(STATUS "@@@ Add::add INTERFACE_LINK_LIBRARIES = ${_value}")
