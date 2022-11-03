@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.rc": "cpp",
+        "qtqml": "cpp",
+        "qqmlapplicationengine": "cpp",
+        "qguiapplication": "cpp",
+        "iostream": "cpp",
+        "sstream": "cpp"
+    }
+}
