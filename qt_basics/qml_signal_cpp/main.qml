@@ -1,75 +1,36 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.11
-import com.pack 1.0
+import demo.calc 1.0 // defined by qmlRegisterType
 
 ApplicationWindow {
     width: 600
     height: 500
     visible: true
 
-    Calculator {
+    Switch {
         id: calc
-        textArea: info
+        linkedText: info
     }
 
     ColumnLayout {
 
         TextArea {
             id: info
-            text: ""
+            text: "Nothing Happens"
             enabled: false
         }
 
         GridLayout  {
-            columns: 3
+            columns: 2
             Button {
-                text: "1"
-                onClicked: { calc.Input(text) }
-            }
-            Button {
-                text: "2"
-                onClicked: { calc.Input(text) }
+                text: "Open"
+                onClicked: { calc.Open() }
             }
             Button {
-                text: "3"
-                onClicked: { calc.Input(text) }
+                text: "Close"
+                onClicked: { calc.Close() }
             }
-            Button {
-                text: "4"
-                onClicked: { calc.Input(text) }
-            }
-            Button {
-                text: "5"
-                onClicked: { calc.Input(text) }
-            }
-            Button {
-                text: "6"
-                onClicked: { calc.Input(text) }
-            }
-            Button {
-                text: "7"
-                onClicked: { calc.Input(text) }
-            }
-            Button {
-                text: "8"
-                onClicked: { calc.Input(text) }
-            }
-            Button {
-                text: "9"
-                onClicked: { calc.Input(text) }
-            }
-            Label {
-                
-            }
-            Button {
-                text: "0"
-                onClicked: { calc.Input(text) }
-            }
-            Button {
-                text: "C"
-                onClicked: { calc.Input(text) }
-            }
-        } // GridLayout
+        }
     }
 }

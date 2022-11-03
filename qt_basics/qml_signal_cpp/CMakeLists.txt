@@ -26,7 +26,7 @@ get_dirs_from_paths(_QMLDirs ${_QMLFiles})
 
 # demo
 add_executable(qt_demo WIN32
-    ${CMAKE_CURRENT_LIST_DIR}/calculator.h
+    ${CMAKE_CURRENT_LIST_DIR}/switch.h
     ${CMAKE_CURRENT_LIST_DIR}/main.cpp
     ${CMAKE_CURRENT_LIST_DIR}/qml.qrc
     ${_QMLFiles}
@@ -43,14 +43,14 @@ target_compile_definitions(qt_demo
         QT_NO_KEYWORDS
 )
 
-# deploy demo
-set(QT_DEPLOY_EXE ${MS_QT_ROOT}/bin/windeployqt.exe)
-set(QT_DEPLOY_COMMAND ${QT_DEPLOY_EXE} --$<LOWER_CASE:$<CONFIG>> $<TARGET_FILE:qt_demo>)
-foreach(_d ${_QMLDirs})
-    list(APPEND QT_DEPLOY_COMMAND --qmldir ${_d})
-endforeach(_d)
-add_custom_command(
-    TARGET qt_demo
-    POST_BUILD
-    COMMAND ${QT_DEPLOY_COMMAND}
-)
+# # deploy demo
+# set(QT_DEPLOY_EXE ${MS_QT_ROOT}/bin/windeployqt.exe)
+# set(QT_DEPLOY_COMMAND ${QT_DEPLOY_EXE} --$<LOWER_CASE:$<CONFIG>> $<TARGET_FILE:qt_demo>)
+# foreach(_d ${_QMLDirs})
+#     list(APPEND QT_DEPLOY_COMMAND --qmldir ${_d})
+# endforeach(_d)
+# add_custom_command(
+#     TARGET qt_demo
+#     POST_BUILD
+#     COMMAND ${QT_DEPLOY_COMMAND}
+# )
