@@ -8,7 +8,8 @@ class Switch:
 {
     Q_OBJECT
     /* define a property will link !!! Var / Read / Write / Notify !!! together */
-    Q_PROPERTY(QObject *linkedText READ linkedText WRITE setlinkedText NOTIFY linkedTextChanged) 
+    Q_PROPERTY(QObject *linkedText READ linkedText WRITE setLinkedText)
+    Q_PROPERTY(bool state READ state WRITE setState NOTIFY stateChanged)
     QML_ANONYMOUS
 
 public:
@@ -16,29 +17,50 @@ public:
         QObject(object)
     {}
 
+    ////////////////////////////////////////////////////////////////////////////////////
     // interfaces, can be accessed in qml
+    ////////////////////////////////////////////////////////////////////////////////////
+public:
     Q_INVOKABLE void Open() {
         qInfo() << "Open Switch";
-        m_linkedText->setProperty("text", "On");
+        if(m_linkedText) {
+            m_linkedText->setProperty("text", "On");
+        }
+        setState(true);
     }
 
-    Q_INVOKABLE void Close() {
-        qInfo() << "Close Switch";
-        m_linkedText->setProperty("text", "Off");
-    }
-
-public:
+    ////////////////////////////////////////////////////////////////////////////////////
     // following code is everything we've done for support of property linkedText
+    ////////////////////////////////////////////////////////////////////////////////////
+public:
     QObject* linkedText() const {
         return m_linkedText;
     }
-    void setlinkedText(QObject* linkedText) {
+    void setLinkedText(QObject* linkedText) {
         m_linkedText = linkedText;
     }
 
-Q_SIGNALS:
-    void linkedTextChanged();
-
 private:
     QObject *m_linkedText{nullptr};
+
+    ////////////////////////////////////////////////////////////////////////////////////
+    // following code is everything we've done for support of property state
+    ////////////////////////////////////////////////////////////////////////////////////
+public:
+    bool state() const {
+        return m_state;
+    }
+    void setState(bool state) {
+        if (state != m_state) {
+            m_state = state;
+            qInfo() << "emit signal stateChanged from Switch";
+            emit stateChanged(state);
+        }
+    }
+
+Q_SIGNALS:
+    void stateChanged(bool state);
+
+private:
+    bool m_state{false};
 };

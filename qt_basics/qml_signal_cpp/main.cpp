@@ -1,16 +1,37 @@
 #include <iostream>
 #include <QtQml>
+#include <QQmlEngine>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include "switch.h"
+#include "waker.h"
 
 
 int main(int argc, char *argv[])
 {
+    // register pure C++ type to QML
     qmlRegisterType<Switch> ( /*class of C++ to register*/
-        "demo.calc", /* package name to register, for IMPORT in QML*/
+        "demo.switch", /* package name to register, for IMPORT in QML*/
         1, 0, /* version: major, minor */
         "Switch" /* component name in QML */
+    );
+    qmlRegisterType<Waker> (
+        "demo.waker",
+        1, 0,
+        "Waker"
+    );
+    // register pure QML
+    qmlRegisterType(
+        QUrl(QStringLiteral("qrc:///page1.qml")),
+        "demo.page1",
+        1, 0,
+        "Page1"
+    );
+    qmlRegisterType(
+        QUrl(QStringLiteral("qrc:///page2.qml")),
+        "demo.page2",
+        1, 0,
+        "Page2"
     );
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);

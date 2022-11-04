@@ -27,6 +27,7 @@ get_dirs_from_paths(_QMLDirs ${_QMLFiles})
 # demo
 add_executable(qt_demo WIN32
     ${CMAKE_CURRENT_LIST_DIR}/switch.h
+    ${CMAKE_CURRENT_LIST_DIR}/waker.h
     ${CMAKE_CURRENT_LIST_DIR}/main.cpp
     ${CMAKE_CURRENT_LIST_DIR}/qml.qrc
     ${_QMLFiles}
@@ -38,10 +39,13 @@ target_link_libraries(qt_demo
         Qt${QT_VERSION_MAJOR}::Gui
         Qt${QT_VERSION_MAJOR}::Quick
 )
-target_compile_definitions(qt_demo
-    PRIVATE
-        QT_NO_KEYWORDS
-)
+
+# # enable this to disable "signals" and "slots" marcros to avoid compile problems
+# #  after this, we can still use "Q_SIGNALS" and "Q_SLOTS"
+# target_compile_definitions(qt_demo
+#     PRIVATE
+#         QT_NO_KEYWORDS
+# )
 
 # # deploy demo
 # set(QT_DEPLOY_EXE ${MS_QT_ROOT}/bin/windeployqt.exe)
