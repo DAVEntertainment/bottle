@@ -40,6 +40,15 @@ set(TARGET_PRIVATE_HEADERS
 ##################################################################
 add_library(${TARGET_NAME} STATIC ${TARGET_PUBLIC_HEADERS} ${TARGET_PRIVATE_HEADERS} ${TARGET_SOURCES})
 
+# !!! ATTENTION !!!
+# !!! installing through target's property PUBLIC_HEADER, you
+# !!! will lose the hierarchy of headers.
+# !!! OPTION.1
+# !!! it's better to use target_sources (new in 3.23, see more in demo 
+# !!! bottle/cpp_with_cmake/cmake_shared_library_export_all/library/CMakeLists.txt)
+# !!! OPTION.2
+# !!! use install(FILES ...) to install headers instead if using CMake
+# !!! older than 3.23
 # set public headers, 
 #   cmake will install them automatically to
 #   PUBLIC_HEADER DESTINATION
