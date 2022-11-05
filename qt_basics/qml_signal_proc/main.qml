@@ -11,6 +11,9 @@ ApplicationWindow {
     Calculator {
         id: calc
         textArea: info
+        onTextAreaChanged: {
+            console.log("calc text area changed to ", textArea)
+        }
     }
 
     ColumnLayout {
