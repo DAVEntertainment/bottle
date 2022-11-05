@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16.6)
+cmake_minimum_required(VERSION 3.23)
 project(demo)
 
 ##################################################################
@@ -17,6 +17,7 @@ set(TARGET_NAMESPACE Demo)
 ##################################################################
 set(TARGET_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 set(TARGET_SOURCES
     src/add.cpp
@@ -35,30 +36,29 @@ set(TARGET_PRIVATE_HEADERS
 # library properties
 ##################################################################
 add_library(${TARGET_NAME} SHARED ${TARGET_SOURCES})
-# add_library(${TARGET_NAME} SHARED ${TARGET_PUBLIC_HEADERS} ${TARGET_PRIVATE_HEADERS} ${TARGET_SOURCES})
 # set_target_properties(${TARGET_NAME} PROPERTIES
 #     MSVC_RUNTIME_LIBRARY MultiThreadedDLL
 # )
 
-# set public headers, 
-#   cmake will install them automatically to
-#   PUBLIC_HEADER DESTINATION
-set_target_properties(${TARGET_NAME} PROPERTIES
-    PUBLIC_HEADER "${TARGET_PUBLIC_HEADERS}"
-    # PRIVATE_HEADER "${TARGET_PRIVATE_HEADERS}" # if PRIVATE_HEADER is given, then will be installed, too
-)
-# add include directories for generating shared library, as property INCLUDE_DIRECTORIES
-target_include_directories(${TARGET_NAME} PRIVATE
-    ${TARGET_INCLUDE_DIRS}
+# set public headers as target's file set (new in CMake 3.23)
+target_sources(${TARGET_NAME}
+    PUBLIC
+        FILE_SET    exported_headers
+        TYPE        HEADERS         # specify type as HEADERS, so that cmake will install them automatically to PUBLIC_HEADER DESTINATION
+        BASE_DIRS   ${TARGET_INCLUDE_DIRS}
+        FILES       ${TARGET_PUBLIC_HEADERS}
 )
 
 # speicify interface include directories,
 #   as property INTERFACE_INCLUDE_DIRECTORIES and INTERFACE_SYSTEM_INCLUDE_DIRECTORIES,
 #   the interface include directories will be passed to the target which refers demo
 string(REPLACE ";" "$<SEMICOLON>" _include_dirs "${TARGET_INCLUDE_DIRS}")
-target_include_directories(${TARGET_NAME} SYSTEM INTERFACE
-    "$<BUILD_INTERFACE:${_include_dirs}>"
-    "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>"
+target_include_directories(${TARGET_NAME} SYSTEM
+    INTERFACE
+        "$<BUILD_INTERFACE:${_include_dirs}>"
+        "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>"
+    PRIVATE # add include directories for generating shared library, as property INCLUDE_DIRECTORIES
+        ${TARGET_INCLUDE_DIRS}
 )
 
 # add macro DEMO_EXPORT_API so that *.h will enable dllexport
@@ -71,6 +71,7 @@ target_compile_definitions(${TARGET_NAME} PRIVATE -DDEMO_EXPORT_API)
 install(
     TARGETS ${TARGET_NAME}
     EXPORT ${TARGET_NAME}
+    FILE_SET exported_headers
 )
 
 # install <TARGET>Targets*.cmake files
