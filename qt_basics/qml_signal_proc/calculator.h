@@ -33,7 +33,11 @@ public:
         return m_textArea;
     }
     void setTextArea(QObject* aTextArea) {
-        m_textArea = aTextArea;
+        if(m_textArea != aTextArea) {
+            m_textArea = aTextArea;
+            qInfo() << "text area changed";
+            Q_EMIT textAreaChanged(); // use Q_EMIT instead of emit, cause QT_NO_KEYWORDS is defined
+        }
     }
 
 Q_SIGNALS:
