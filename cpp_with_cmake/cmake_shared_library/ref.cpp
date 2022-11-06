@@ -19,6 +19,6 @@ int main() {
     // int e = product(x, y);
     std::cout << x << " + " << y << " = " << z << std::endl;
     std::cout << x << " - " << y << " = " << d << std::endl;
-    // std::cout << x << " * " << y << " = " << d << std::endl;
+    // std::cout << x << " * " << y << " = " << e << std::endl;
     return 0;
 }
