@@ -1,10 +1,17 @@
-cmake_minimum_required(VERSION 3.16.6)
+cmake_minimum_required(VERSION 3.23)
 project(demo)
 
 ##################################################################
 # project configurations
 ##################################################################
 set(CMAKE_DEBUG_POSTFIX d)
+# after enabling CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS, no need to specify
+#   __declspec(dllimport/dllexport) for functions,
+#   but still need to for variables
+#   see more:
+#       https://cmake.org/cmake/help/latest/prop_tgt/WINDOWS_EXPORT_ALL_SYMBOLS.html
+#       https://stackoverflow.com/questions/54560832/cmake-windows-export-all-symbols-does-not-cover-global-variables
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 ##################################################################
 # target configurations
@@ -12,62 +19,52 @@ set(CMAKE_DEBUG_POSTFIX d)
 set(TARGET_NAME demo)
 set(TARGET_NAMESPACE Demo)
 
-set(TARGET_RUNTIME_INSTALL_DIR bin)
-set(TARGET_ARCHIVE_INSTALL_DIR lib)
-set(TARGET_LIBRARY_INSTALL_DIR lib)
-set(TARGET_PUBLIC_HEADER_INSTALL_DIR include)
-set(TARGET_PRIVATE_HEADER_INSTALL_DIR include/private)
+##################################################################
+# find dependency package
+##################################################################
+list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_LIST_DIR}/sub/.install)
+find_package(Sub CONFIG)
 
 ##################################################################
 # target sources
 ##################################################################
 set(TARGET_INCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}/public
-    ${CMAKE_CURRENT_SOURCE_DIR}/private
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 set(TARGET_SOURCES
-    imp.cpp
+    src/add.cpp
+    src/del.cpp
 )
 set(TARGET_PUBLIC_HEADERS
-    public/demo/add.h
-)
-set(TARGET_PRIVATE_HEADERS
-    private/priv_demo/del.h
+    include/demo/add.h
 )
 
 ##################################################################
 # library properties
 ##################################################################
-add_library(${TARGET_NAME} STATIC ${TARGET_PUBLIC_HEADERS} ${TARGET_PRIVATE_HEADERS} ${TARGET_SOURCES})
+add_library(${TARGET_NAME} SHARED ${TARGET_SOURCES})
+target_link_libraries(${TARGET_NAME} PRIVATE Sub::sub)
 
-# !!! ATTENTION !!!
-# !!! installing through target's property PUBLIC_HEADER, you
-# !!! will lose the hierarchy of headers.
-# !!! OPTION.1
-# !!! it's better to use target_sources (new in 3.23, see more in demo 
-# !!! bottle/cpp_with_cmake/cmake_shared_library_export_all/library/CMakeLists.txt)
-# !!! OPTION.2
-# !!! use install(FILES ...) to install headers instead if using CMake
-# !!! older than 3.23
-# set public headers, 
-#   cmake will install them automatically to
-#   PUBLIC_HEADER DESTINATION
-set_target_properties(${TARGET_NAME} PROPERTIES
-    PUBLIC_HEADER "${TARGET_PUBLIC_HEADERS}"
-    # PRIVATE_HEADER "${TARGET_PRIVATE_HEADERS}" # if PRIVATE_HEADER is given, then will be installed, too
-)
-# add include directories for generating shared library, as property INCLUDE_DIRECTORIES
-target_include_directories(${TARGET_NAME} PRIVATE
-    ${TARGET_INCLUDE_DIRS}
+# set public headers as target's file set (new in CMake 3.23)
+target_sources(${TARGET_NAME}
+    PUBLIC
+        FILE_SET    exported_headers
+        TYPE        HEADERS         # specify type as HEADERS, so that cmake will install them automatically to PUBLIC_HEADER DESTINATION
+        BASE_DIRS   ${TARGET_INCLUDE_DIRS}
+        FILES       ${TARGET_PUBLIC_HEADERS}
 )
 
 # speicify interface include directories,
 #   as property INTERFACE_INCLUDE_DIRECTORIES and INTERFACE_SYSTEM_INCLUDE_DIRECTORIES,
 #   the interface include directories will be passed to the target which refers demo
 string(REPLACE ";" "$<SEMICOLON>" _include_dirs "${TARGET_INCLUDE_DIRS}")
-target_include_directories(${TARGET_NAME} SYSTEM INTERFACE
-    "$<BUILD_INTERFACE:${_include_dirs}>"
-    "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${TARGET_PUBLIC_HEADER_INSTALL_DIR}>"
+target_include_directories(${TARGET_NAME} SYSTEM
+    INTERFACE
+        "$<BUILD_INTERFACE:${_include_dirs}>"
+        "$<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>"
+    PRIVATE # add include directories for generating shared library, as property INCLUDE_DIRECTORIES
+        ${TARGET_INCLUDE_DIRS}
 )
 
 ##################################################################
@@ -77,11 +74,7 @@ target_include_directories(${TARGET_NAME} SYSTEM INTERFACE
 install(
     TARGETS ${TARGET_NAME}
     EXPORT ${TARGET_NAME}
-    RUNTIME DESTINATION ${TARGET_RUNTIME_INSTALL_DIR}
-    ARCHIVE DESTINATION ${TARGET_ARCHIVE_INSTALL_DIR}
-    LIBRARY DESTINATION ${TARGET_LIBRARY_INSTALL_DIR}
-    PUBLIC_HEADER DESTINATION ${TARGET_PUBLIC_HEADER_INSTALL_DIR}
-    PRIVATE_HEADER DESTINATION ${TARGET_PRIVATE_HEADER_INSTALL_DIR}
+    FILE_SET exported_headers
 )
 
 # install <TARGET>Targets*.cmake files

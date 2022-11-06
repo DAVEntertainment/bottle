@@ -1,15 +1,15 @@
-#include "add.h"
+#include "demo/add.h"
 #include <iostream>
 
 // although we don't share del.h, but the symbol is there anyway,
 //  we can use them by simply declare the signature
-DEF_API int del(int, int);
+DEMO_API int del(int, int);
 
-// even if we declare product here(in either way),
-//  the symbol of "product" cannot be found,
-//  cause product is not declared when export with DEF_API
-// DEF_API int product(int, int);
-// // int product(int, int);
+// // even if we declare product here(in either way),
+// //  the symbol of "product" cannot be found,
+// //  cause product is not declared when export with DEMO_API
+// DEMO_API int product(int, int);
+// // // int product(int, int);
 
 int main() {
     int x = 10;
