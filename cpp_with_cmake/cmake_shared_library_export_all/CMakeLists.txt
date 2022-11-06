@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16.6)
+cmake_minimum_required(VERSION 3.21)
 project(lib_ref_demo)
 
 # add path for find_package

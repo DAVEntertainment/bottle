@@ -1,5 +1,3 @@
-call %~dp0\sub\build_sub.cmd
-
 set SOURCE_DIR=%~dp0
 set BUILD_DIR=%SOURCE_DIR%.build
 set INSTALL_DIR=%SOURCE_DIR%.install

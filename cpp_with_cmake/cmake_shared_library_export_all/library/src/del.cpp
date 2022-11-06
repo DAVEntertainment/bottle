@@ -1,5 +1,5 @@
-#include "del.h"
+#include "sub/sub.h"
 
 int del(int a, int b) {
-    return a - b;
+    return sub(a, b);
 }

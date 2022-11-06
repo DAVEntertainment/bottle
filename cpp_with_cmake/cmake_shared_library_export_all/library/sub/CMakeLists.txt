@@ -1,29 +1,16 @@
 cmake_minimum_required(VERSION 3.23)
-project(demo)
+project(sub)
 
 ##################################################################
 # project configurations
 ##################################################################
 set(CMAKE_DEBUG_POSTFIX d)
-# after enabling CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS, no need to specify
-#   __declspec(dllimport/dllexport) for functions,
-#   but still need to for variables
-#   see more:
-#       https://cmake.org/cmake/help/latest/prop_tgt/WINDOWS_EXPORT_ALL_SYMBOLS.html
-#       https://stackoverflow.com/questions/54560832/cmake-windows-export-all-symbols-does-not-cover-global-variables
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 ##################################################################
 # target configurations
 ##################################################################
-set(TARGET_NAME demo)
-set(TARGET_NAMESPACE Demo)
-
-##################################################################
-# find dependency package
-##################################################################
-list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_LIST_DIR}/sub/.install)
-find_package(Sub CONFIG)
+set(TARGET_NAME sub)
+set(TARGET_NAMESPACE Sub)
 
 ##################################################################
 # target sources
@@ -33,18 +20,16 @@ set(TARGET_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 set(TARGET_SOURCES
-    src/add.cpp
-    src/del.cpp
+    src/sub.cpp
 )
 set(TARGET_PUBLIC_HEADERS
-    include/demo/add.h
+    include/sub/sub.h
 )
 
 ##################################################################
 # library properties
 ##################################################################
-add_library(${TARGET_NAME} SHARED ${TARGET_SOURCES})
-target_link_libraries(${TARGET_NAME} PRIVATE Sub::sub)
+add_library(${TARGET_NAME} STATIC ${TARGET_SOURCES})
 
 # set public headers as target's file set (new in CMake 3.23)
 target_sources(${TARGET_NAME}
@@ -57,7 +42,7 @@ target_sources(${TARGET_NAME}
 
 # speicify interface include directories,
 #   as property INTERFACE_INCLUDE_DIRECTORIES and INTERFACE_SYSTEM_INCLUDE_DIRECTORIES,
-#   the interface include directories will be passed to the target which refers demo
+#   the interface include directories will be passed to the target which refers sub
 string(REPLACE ";" "$<SEMICOLON>" _include_dirs "${TARGET_INCLUDE_DIRS}")
 target_include_directories(${TARGET_NAME} SYSTEM
     INTERFACE
@@ -86,7 +71,7 @@ install(
 )
 
 ##################################################################
-# <TARGET>Config.cmake and <TARGET>ConfigVersion.cmake 
+# <TARGET>Config.cmake and <TARGET>ConfigVersion.cmake
 ##################################################################
 # CMakePackageConfigHelpers provides
 #   write_basic_package_version_file
