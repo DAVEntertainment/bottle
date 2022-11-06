@@ -1,4 +1,4 @@
-call library\build_static.cmd
+call %~dp0\library\build_static.cmd
 
 set SOURCE_DIR=%~dp0
 set BUILD_DIR=%SOURCE_DIR%.build

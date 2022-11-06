@@ -1,4 +1,4 @@
-call library\build_shared.cmd
+call %~dp0\library\build_shared.cmd
 
 set SOURCE_DIR=%~dp0
 set BUILD_DIR=%SOURCE_DIR%.build
