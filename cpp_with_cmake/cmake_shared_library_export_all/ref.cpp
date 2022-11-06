@@ -9,6 +9,12 @@
 //  but still need for variables
 int del(int, int);
 
+// library Sub::sub is linked to Demo::demo as PRIVATE
+//  so we can't access to it here.
+//  although we can link Sub::sub to Demo::demo as PUBLIC,
+//  then lib_ref_demo need to find_package Sub so that
+//  the dependency of Sub::sub passed by Demo::demo is
+//  accessible
 // int sub(int, int);
 
 int main() {
