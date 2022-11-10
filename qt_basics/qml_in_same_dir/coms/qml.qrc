@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/coms/">
+        <file>EditDialog.qml</file>
+        <file>EditBox.qml</file>
+    </qresource>
+</RCC>
