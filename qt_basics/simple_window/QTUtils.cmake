@@ -1,15 +1,3 @@
-
-function(deploy_qt_shared_library aSharedLibrary)
-    
-endfunction(deploy_qt_shared_library)
-
-# deploy_qt_executable(aExecutable)
-# deploy_qt_executable(aExecutable aQMLRoot)
-function(deploy_qt_executable aExecutable)
-
-
-endfunction(deploy_qt_executable)
-
 function(print_list aListName aList)
     message(STATUS "${aListName}:")
     foreach(_e ${aList})
