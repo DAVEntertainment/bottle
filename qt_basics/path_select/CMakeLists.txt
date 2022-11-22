@@ -26,7 +26,6 @@ get_dirs_from_paths(_QMLDirs ${_QMLFiles})
 
 # demo
 add_executable(qt_demo
-    ${CMAKE_CURRENT_LIST_DIR}/demo.h
     ${CMAKE_CURRENT_LIST_DIR}/main.cpp
     ${CMAKE_CURRENT_LIST_DIR}/qml.qrc
     ${_QMLFiles}
