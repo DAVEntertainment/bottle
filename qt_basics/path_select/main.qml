@@ -1,6 +1,6 @@
 import QtQuick 2.11
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.0
+import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
     width: 600
