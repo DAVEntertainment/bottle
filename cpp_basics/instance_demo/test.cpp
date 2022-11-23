@@ -121,6 +121,18 @@ void test_17() {
     auto& i = use_1();
 }
 
+Ref use_static() {
+    static Ref i;
+    return i;
+}
+void test_18() {
+    new_section(__FUNCTION__, "");
+    auto i = use_static();
+}
+void test_19() {
+    new_section(__FUNCTION__, "");
+    auto i = use_static();
+}
 
 
 int main()
@@ -145,6 +157,8 @@ int main()
     test_15();
     test_16();
     test_17();
+    test_18();
+    test_19();
 
     new_section(__FUNCTION__, "exit");
     return 0;
