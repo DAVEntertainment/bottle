@@ -36,6 +36,16 @@ public:
         m_id = m_instCount++;
         cout << "Ref(const Ref& ) " << m_id << endl;
     }
+    Ref& operator=(const Ref& i)
+    {
+        cout << "Ref& operator=(const Ref&) " << m_id << endl;
+        return (*this);
+    }
+    Ref& operator=(const Ref&& i)
+    {
+        cout << "Ref& operator=(const Ref&&) " << m_id << endl;
+        return (*this);
+    }
     ~Ref() {
         cout << "~Ref() " << m_id << endl;
     }

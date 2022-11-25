@@ -289,6 +289,56 @@ void pr_11() {
     cout << __FUNCTION__ << " end"  << endl;
 }
 
+////////////////////////////////////////////////////////////////////////////
+// test for instances
+////////////////////////////////////////////////////////////////////////////
+void pass_right_to_inst_direct(Ref&& in) {
+    Ref i(in);
+}
+void inst_0() {
+    new_section(__FUNCTION__, "");
+    pass_right_to_inst_direct(Ref());
+}
+
+void pass_left_to_inst_direct(Ref& in) {
+    Ref i(in);
+}
+void inst_1() {
+    new_section(__FUNCTION__, "");
+    pass_left_to_inst_direct(Ref());
+}
+
+void pass_right_to_inst_assign(Ref&& in) {
+    Ref i = in;
+}
+void inst_2() {
+    new_section(__FUNCTION__, "");
+    pass_right_to_inst_assign(Ref());
+}
+
+void pass_left_to_inst_assign(Ref& in) {
+    Ref i = in;
+}
+void inst_3() {
+    new_section(__FUNCTION__, "");
+    pass_left_to_inst_assign(Ref());
+}
+
+void pass_right_to_global(Ref&& in) {
+    global = in; // Ref& operator=(const Ref&) will be called
+}
+void inst_4() {
+    new_section(__FUNCTION__, "");
+    pass_right_to_global(Ref());
+}
+
+void move_right_to_global(Ref&& in) {
+    global = std::move(in);
+}
+void inst_5() {
+    new_section(__FUNCTION__, "");
+    move_right_to_global(Ref());
+}
 
 int main()
 {
@@ -347,6 +397,16 @@ int main()
     pr_9();
     pr_10();
     pr_11();
+
+    ////////////////////////////////////////////////////////////////////////////
+    // test for instances
+    ////////////////////////////////////////////////////////////////////////////
+    inst_0();
+    inst_1();
+    inst_2();
+    inst_3();
+    inst_4();
+    inst_5();
 
     new_section(__FUNCTION__, "exit");
     return 0;
