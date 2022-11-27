@@ -340,6 +340,191 @@ void inst_5() {
     move_right_to_global(Ref());
 }
 
+////////////////////////////////////////////////////////////////////////////
+// test for tuple instances
+////////////////////////////////////////////////////////////////////////////
+#include <tuple>
+
+void tuple_0() {
+    new_section(__FUNCTION__, "");
+    std::tuple<Ref, bool> t(Ref(), true);
+}
+void tuple_1() {
+    new_section(__FUNCTION__, "");
+    std::tuple<Ref, bool> t(Ref(), true);
+    auto i = std::get<0>(t);
+}
+void tuple_2() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    std::tuple<Ref, bool> t(i, true);
+}
+void tuple_3() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    std::tuple<Ref, bool> t(std::move(i), true);
+}
+void tuple_4() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    std::tuple<Ref*, bool> t(&i, true);
+}
+void tuple_5() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    std::tuple<Ref&, bool> t(i, true);
+}
+
+std::tuple<Ref&, bool> create_ref_tuple() {
+    Ref i;
+    // !!! ATTETION !!!
+    //  this is un-safe, by returing Ref&,
+    //  cause "i" in create_ref_tuple
+    //  will be destroyed after poping call stack
+    return std::tuple<Ref&, bool>(i, true);
+}
+void tuple_6() {
+    new_section(__FUNCTION__, "");
+    auto t = create_ref_tuple();
+    // the only instance created will be destroyed here
+    cout << __FUNCTION__ << " end"  << endl;
+    // creating c is un-safe
+    Ref c(std::get<0>(t));
+    cout << "c " << c.m_id << endl;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// test for function instances
+////////////////////////////////////////////////////////////////////////////
+#include <functional>
+void bind_ref(Ref& i) {
+    cout << "bind_ref " << i.m_id << endl;
+}
+void func_0() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    auto f = std::bind(bind_ref, std::ref(i));
+    f();
+}
+void func_1() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    auto f = std::bind(bind_ref, i);
+    f();
+}
+
+void bind_value(Ref i) {
+    cout << "bind_value " << i.m_id << endl;
+}
+void func_2() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    auto f = std::bind(bind_value, std::ref(i));
+    f();
+}
+void func_3() {  // by this way, 3 instances will created
+    new_section(__FUNCTION__, "");
+    Ref i;
+    auto f = std::bind(bind_value, i);
+    f();
+}
+
+////////////////////////////////////////////////////////////////////////////
+// test for lambda instances
+////////////////////////////////////////////////////////////////////////////
+// without local variable
+void lambda_0() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    auto f = [](Ref in) {
+        cout << "lambda call " << in.m_id << endl;
+    };
+    cout << __FUNCTION__ << " lambda created" << endl;
+    f(i);
+}
+void lambda_1() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    auto f = [](Ref& in) {
+        cout << "lambda call " << in.m_id << endl;
+    };
+    cout << __FUNCTION__ << " lambda created" << endl;
+    f(i);
+}
+// with local variable
+//  call lambda directly
+void lambda_2() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    auto f = [&]() {
+        cout << "lambda call (i = " << i.m_id << ")" << endl;
+    };
+    cout << __FUNCTION__ << " lambda created" << endl;
+    f();
+}
+void lambda_3() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    auto f = [=]() { // catch with Ref(const Ref& )
+        cout << "lambda call (i = " << i.m_id << ")" << endl;
+    };
+    cout << __FUNCTION__ << " lambda created" << endl;
+    f();
+}
+//  bind nothing
+void lambda_4() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    auto f = std::bind([&]() {
+        cout << "lambda call (i = " << i.m_id << ")" << endl;
+    });
+    cout << __FUNCTION__ << " lambda created" << endl;
+    f();
+}
+void lambda_5() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    auto f = std::bind([=]() {
+        cout << "lambda call (i = " << i.m_id << ")" << endl;
+    });
+    cout << __FUNCTION__ << " lambda created" << endl;
+    f();
+}
+void lambda_6() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    auto lam = [=]() {
+        cout << "lambda call (i = " << i.m_id << ")" << endl;
+    };  // lambda will catch an instance
+    cout << __FUNCTION__ << " lambda created" << endl;
+    lam();
+    auto f = std::bind(lam);   // bind will create another instance
+    cout << __FUNCTION__ << " binded" << endl;
+    f();
+}
+//  bind input
+void lambda_7() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    auto f = std::bind([=](Ref& in) {
+        cout << "lambda call (i = " << i.m_id << ")" << endl;
+        cout << "lambda call (in = " << in.m_id << ")" <<endl;
+    }, std::ref(i));
+    cout << __FUNCTION__ << " lambda created" << endl;
+    f();
+}
+void lambda_8() {
+    new_section(__FUNCTION__, "");
+    Ref i;
+    auto f = std::bind([&](Ref& in) {
+        cout << "lambda call (i = " << i.m_id << ")" << endl;
+        cout << "lambda call (in = " << in.m_id << ")" <<endl;
+    }, std::ref(i));
+    cout << __FUNCTION__ << " lambda created" << endl;
+    f();
+}
+
+
 int main()
 {
     new_section(__FUNCTION__, "enter");
@@ -407,6 +592,38 @@ int main()
     inst_3();
     inst_4();
     inst_5();
+
+    ////////////////////////////////////////////////////////////////////////////
+    // test for tuple instances
+    ////////////////////////////////////////////////////////////////////////////
+    tuple_0();
+    tuple_1();
+    tuple_2();
+    tuple_3();
+    tuple_4();
+    tuple_5();
+    tuple_6();
+
+    ////////////////////////////////////////////////////////////////////////////
+    // test for function instances
+    ////////////////////////////////////////////////////////////////////////////
+    func_0();
+    func_1();
+    func_2();
+    func_3();
+
+    ////////////////////////////////////////////////////////////////////////////
+    // test for lambda instances
+    ////////////////////////////////////////////////////////////////////////////
+    lambda_0();
+    lambda_1();
+    lambda_2();
+    lambda_3();
+    lambda_4();
+    lambda_5();
+    lambda_6();
+    lambda_7();
+    lambda_8();
 
     new_section(__FUNCTION__, "exit");
     return 0;
