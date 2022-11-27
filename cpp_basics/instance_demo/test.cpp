@@ -53,7 +53,7 @@ void return_5() {
     new_section(__FUNCTION__, "");
     create_1();
 }
-void return_6() {
+void return_6() {  // interesting
     new_section(__FUNCTION__, "");
     auto i = create_1();
 }
@@ -65,7 +65,7 @@ void return_7() {
     new_section(__FUNCTION__, "");
     create_2();
 }
-void return_8() {
+void return_8() {  // interesting
     new_section(__FUNCTION__, "");
     auto i = create_2();
 }
@@ -85,13 +85,13 @@ void return_10() {
 
 Ref create_4() {
     Ref i = create_1();
-    return i;
+    return i;  // interesting, no Ref&& construction
 }
 void return_11() {
     new_section(__FUNCTION__, "");
     create_4();
 }
-void return_12() {
+void return_12() {  // interesting, same as 11
     new_section(__FUNCTION__, "");
     auto i = create_4();
 }
@@ -126,7 +126,7 @@ void return_17() {
 }
 
 Ref use_static() {
-    static Ref i;
+    static Ref i;  // created when called the first time
     return i;
 }
 void return_18() {
@@ -145,7 +145,7 @@ void pass_value(Ref in) {
 }
 void pass_0() {
     new_section(__FUNCTION__, "");
-    pass_value(Ref());
+    pass_value(Ref());  // interesting, destroyed before pass_0 end
     cout << __FUNCTION__ << " end"  << endl;
 }
 void pass_1() {
@@ -211,12 +211,14 @@ Ref pass_and_return_value(Ref in) {
 }
 void pr_0() {
     new_section(__FUNCTION__, "");
-    pass_and_return_value(Ref());
+    pass_and_return_value(Ref());  // Ref() will be destroyed before return value
+    // return value destroy, after last line
     cout << __FUNCTION__ << " end"  << endl;
 }
 void pr_1() {
     new_section(__FUNCTION__, "");
-    auto o = pass_and_return_value(Ref());
+    auto o = pass_and_return_value(Ref());  // return value is held by o
+    // o will be destroyed when pr_1 exit
     cout << __FUNCTION__ << " end"  << endl;
 }
 void pr_2() {
@@ -309,7 +311,7 @@ void inst_1() {
 }
 
 void pass_right_to_inst_assign(Ref&& in) {
-    Ref i = in;
+    Ref i = in;  // created with Ref(Ref& )
 }
 void inst_2() {
     new_section(__FUNCTION__, "");
@@ -317,7 +319,7 @@ void inst_2() {
 }
 
 void pass_left_to_inst_assign(Ref& in) {
-    Ref i = in;
+    Ref i = in;  // created with Ref(Ref& )
 }
 void inst_3() {
     new_section(__FUNCTION__, "");
@@ -325,7 +327,7 @@ void inst_3() {
 }
 
 void pass_right_to_global(Ref&& in) {
-    global = in; // Ref& operator=(const Ref&) will be called
+    global = in;  // Ref& operator=(const Ref&) will be called
 }
 void inst_4() {
     new_section(__FUNCTION__, "");
@@ -333,7 +335,7 @@ void inst_4() {
 }
 
 void move_right_to_global(Ref&& in) {
-    global = std::move(in);
+    global = std::move(in);   // Ref& operator=(const Ref&&) will be called
 }
 void inst_5() {
     new_section(__FUNCTION__, "");
@@ -348,11 +350,14 @@ void inst_5() {
 void tuple_0() {
     new_section(__FUNCTION__, "");
     std::tuple<Ref, bool> t(Ref(), true);
+    // tuple will make its own copy
 }
 void tuple_1() {
     new_section(__FUNCTION__, "");
     std::tuple<Ref, bool> t(Ref(), true);
+    // tuple will make its own copy
     auto i = std::get<0>(t);
+    // get will make its own copy again
 }
 void tuple_2() {
     new_section(__FUNCTION__, "");
@@ -410,6 +415,7 @@ void func_1() {
     new_section(__FUNCTION__, "");
     Ref i;
     auto f = std::bind(bind_ref, i);
+    // withou std::ref, another copy will be created
     f();
 }
 
@@ -420,13 +426,17 @@ void func_2() {
     new_section(__FUNCTION__, "");
     Ref i;
     auto f = std::bind(bind_value, std::ref(i));
-    f();
+    // std::ref will make sure bind ref of "i" to "f", no copy created
+    cout << __FUNCTION__ << " binded" << endl;
+    f();  // another copy will be created when calling bind_value
 }
 void func_3() {  // by this way, 3 instances will created
     new_section(__FUNCTION__, "");
     Ref i;
     auto f = std::bind(bind_value, i);
-    f();
+    // bind will create a copy of i
+    cout << __FUNCTION__ << " binded" << endl;
+    f();  // another copy will be created when calling bind_value
 }
 
 ////////////////////////////////////////////////////////////////////////////
