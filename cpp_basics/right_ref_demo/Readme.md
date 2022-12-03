@@ -1,7 +1,5 @@
 # Demo
-Demo of C++ instances
-
-This demo shows when C++ create an instance, and how it's created
+Demo of C++ class move
 
 # How to build & run
 Just run `test.cmd`
