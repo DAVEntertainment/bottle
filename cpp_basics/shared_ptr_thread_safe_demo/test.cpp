@@ -56,9 +56,9 @@ shared_mutex gMutex;
 condition_variable gCond;
 
 
-shared_ptr<Ref> thread_func(shared_ptr<Ref> p) {
+shared_ptr<Ref> thread_func_1(shared_ptr<Ref> p) {
     cout << "ready" << endl;
-    shared_lock<shared_mutex> lock(gMutex);  // comment this line out, nothing changes
+    shared_lock<shared_mutex> lock(gMutex);  // comment this line out, see anything happens
     cout << "running" << endl;
     shared_ptr<Ref> n{nullptr};
     n = p;
@@ -66,11 +66,21 @@ shared_ptr<Ref> thread_func(shared_ptr<Ref> p) {
     return n;
 }
 
+shared_ptr<Ref> thread_func_2(shared_ptr<Ref>& p) {  // demo according to https://www.zhihu.com/question/56836057
+    cout << "ready" << endl;
+    shared_lock<shared_mutex> lock(gMutex);  // comment this line out, see anything happens
+    cout << "running" << endl;
+    shared_ptr<Ref> n{nullptr};
+    n = p;
+    p = nullptr;
+    p = n;
+    return n;
+}
 
 int main()
 {
     int nNumbers = 1000;
-    int nThreads = 50000;
+    int nThreads = 10000;
     int secsDelay = 5;
     list<thread> threads;
     {
@@ -80,7 +90,8 @@ int main()
         }
         unique_lock<shared_mutex> lock(gMutex);
         for (int i = 0; i < nThreads; ++i) {
-            threads.push_back(thread(bind(thread_func, creator)));
+            threads.push_back(thread(bind(thread_func_1, creator)));
+            // threads.push_back(thread(bind(thread_func_2, std::ref(creator))));
         }
         for (int i = 0; i < secsDelay; ++i) {
             this_thread::sleep_for(chrono::seconds(1));
